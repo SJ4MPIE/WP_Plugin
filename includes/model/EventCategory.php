@@ -200,38 +200,3 @@
 } 
 
 ?> 
-
-<?php
-// If update and id match show update form
-// Add hidden field id for id transfer
-if ( ($action == 'update') &&
-($event_cat_obj->getId() == $get_array['id']) ){
-?>
-   <td width="180"><input type="hidden" name="id" value="<?php
-   echo $event_cat_obj->getId(); ?>">
-
-   <input type="text" name="name" value="<?php
-   echo $event_cat_obj->getName(); ?>"></td>
-
-   <td width="200"><input type="text" name="description" value ="<?php
-   echo $event_cat_obj->getDescription();?>"></td>
-
-   <td colspan="2"><input type="submit" name="update" value="Updaten"
-     /></td>
-<?php } else { ?>
-  <td width="180"><?php echo $event_cat_obj->getName(); ?></td>
-  <td width="200"><?php echo $event_cat_obj->getDescription();?></td>
-
-   <?php if ($action !== 'update') {
-     // If action is update don’t show the action button
-     ?>
-   <td><a href="<?php echo $upd_link; ?>">Update</a></td>
-   <td><a href="<?php echo $del_link; ?>">Delete</a></td>
-
-
-<?php
-} // if action !== update
-?>
-
-<?php } // if acton !== update ?>
- </tr>

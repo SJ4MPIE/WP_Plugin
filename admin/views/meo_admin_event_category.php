@@ -94,18 +94,40 @@ echo '</pre>'; //*/
                         // Add params to base url update link
                         $upd_link = add_query_arg( $params, $base_url );   
                         ?>
-                        <tr><td width="10"><?php echo $event_cat_obj->getId(); ?></td>                    
+                            <tr><td width="10"><?php echo $event_cat_obj->getId(); ?></td>
+                        <?php 
+                         // If update and id match show update form
+                         // Add hidden field id for id transfer
+                         if ( ($action == 'update') &&  
+                         ($event_cat_obj->getId() == $get_array['id']) ){ 
+                        ?>                                     
+                            <td width="180"><input type="hidden" name="id" value="<?php  echo $event_cat_obj->getId(); ?>">
+                            <input type="text" name="name" value="<?php  echo $event_cat_obj->getName(); ?>"></td>
+                            <td width="200"><input type="text" name="description" value ="<?php  echo $event_cat_obj->getDescription();?>"></td>
+                            <td colspan="2"><input type="submit" name="update" value="Updaten" /></td>
+                            <?php } else { ?>
                             <td width="180"><?php echo $event_cat_obj->getName(); ?></td>                    
                             <td width="200"><?php echo $event_cat_obj->getDescription();?></td>
-                            <td><a href="<?php echo $upd_link; ?>">Update</a></td>                    
-                            <td><button onclick="myFunction(<?php echo $event_cat_obj->getId();?>)">Click me</button></td>           
+                            <?php if ($action !== 'update') {
+                                // If action is update don’t show the action button 
+                                ?> 
+                            <td><a href="<?php echo $upd_link; ?>">Update</a></td>
+                            <?php      
+                            } // if action !== update 
+                            ?>
+                            <?php } // if acton !== update ?>                      
+                            <!-- <td><button onclick="myFunction(<?php //echo $event_cat_obj->getId();?>)">Click me</button></td>            -->
                         </tr> 
-                    <?php } ?> 
+                    <?php 
+                    }  // foreach event category
+                    ?> 
             <?php } ?> 
     </table>
     <?php
     // Check if action = update : then end update form
-    echo (($action == 'update' ) ? '</form>' : ''); 
+    echo (($action == 'update' ) ? '</form>' : '');
+       /** Finally add the new entry line only if no update action **/
+       if ($action !== 'update'){ 
     ?>
     <form action="<?php echo $base_url; ?>" method="post"><tr>       
         <table>            
@@ -114,5 +136,8 @@ echo '</pre>'; //*/
             <tr><td colspan="2"><input type="submit" name="add" value="Toevoegen"/>
             </td></tr>       
         </table>    
-    </form>   
+    </form>
+    <?php
+    } // if action !== update
+     ?>  
 </div>

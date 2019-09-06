@@ -13,11 +13,15 @@
         // Define the check for params         
         $post_check_array = array (             
             // submit action             
-            'add'   => array('filter' => FILTER_SANITIZE_STRING ),                          
+            'add'   => array('filter' => FILTER_SANITIZE_STRING ),
+            
+            'update'   => array('filter' => FILTER_SANITIZE_STRING ), 
             // event type name.             
             'name'   => array('filter' => FILTER_SANITIZE_STRING ),                
              // Help text             
-             'description'   => array('filter' => FILTER_SANITIZE_STRING ), 
+             'description'   => array('filter' => FILTER_SANITIZE_STRING ),
+            // Id of current row
+            'id'    => array( 'filter'    => FILTER_VALIDATE_INT ) 
             ); 
             // Get filtered input:         
             $inputs = filter_input_array( INPUT_POST, $post_check_array ); 
@@ -195,6 +199,58 @@
             break;
         }
         return $action;
+    }
+
+    /**
+    * @global type $wpdb Wordpress database
+    * @param type $input_array post_array
+    * @return boolean TRUE on Succes else FALSE
+    * @throws Exception
+    */
+    public function update($input_array){
+        try {
+            $array_fields = array('id', 'name', 'description');
+            $table_fields = array( 'id_event_category', 'name' , 'description');
+            $data_array = array();
+            // Check fields
+            foreach( $array_fields as $field){
+                // Check fields
+                if (!isset($input_array[$field])){
+                    throw new Exception(__("$field is mandatory for update."));
+                }
+                // Add data_array (without hash idx)
+                // (input_array is POST data -> Could have more fields)
+                $data_array[] = $input_array[$field];
+            } 
+             global $wpdb;
+             // Update query
+             //*
+             $wpdb->query($wpdb->prepare("UPDATE ".$this->getTableName().                                         " SET `name` = '%s', `description` = '%s' ".                                         "WHERE `wp_meo_event_category`.`id_event_category` =%d;",$input_array['name'], $input_array['description'], $input_array['id']) ); 
+            /*/
+            // Replace form field id index by table field id name
+            $wpdb->update($this->getTableName(),
+            $this->getTableDataArray($data_array),
+            array( 'id_event_category' => $input_array['id']), // Where
+            array( '%s', '%s' ),    // Data format
+            array( '%d' ));         // Where format
+            //*/
+        } 
+        catch (Exception $exc) {
+            // @todo: Fix error handlin
+            echo $exc->getTraceAsString();
+            $this->last_error = $exc->getMessage(); 
+            return FALSE;
+        } 
+        return TRUE;
+    }
+
+    /**
+    * @global type $wpdb
+    * @return type string table name with wordpress (and app prefix)      
+    */     
+    private function getTableName(){
+        global $wpdb;
+        return $table = $wpdb->prefix . "meo_event_category";
     }
 		       
 } 

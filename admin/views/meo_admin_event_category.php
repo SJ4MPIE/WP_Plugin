@@ -9,24 +9,27 @@ $base_url = get_admin_url().'admin.php'; $params = array( 'page'    => basename(
 // Add params to base url
 $base_url = add_query_arg( $params, $base_url );
 // Get the GET data in filtered array 
-$get_array = $event_categories->getGetValues(); 
-echo '<pre>'; 
-echo __FILE__.__LINE__.'<br />';
-var_dump($get_array); echo '</pre>'; 
+$get_array = $event_categories->getGetValues();
+// Get the POST data in filtered array 
+$post_array = $event_categories->getPostValues(); 
+// echo '<pre>'; 
+// echo __FILE__.__LINE__.'<br />';
+// var_dump($post_array); 
+// var_dump($get_array); 
+// echo '</pre>'; 
+
+// Collect Errors 
+$error = FALSE; 
+
  // Keep track of current action.
 $action = FALSE; 
+
  if (!empty($get_array)){
      // Check actions
      if (isset($get_array['action'])){
          $action = $event_categories->handleGetAction($get_array);
     }
 } 
-// Get the POST data in filtered array 
-$post_array = $event_categories->getPostValues();
-// Check the POST data 
-
-// Collect Errors 
-$error = FALSE; 
  // Check the POST data 
  if (!empty($post_array)){          
     // Check the add form:     
@@ -42,7 +45,13 @@ $error = FALSE;
             // Indicate error            
             $error = TRUE;         
         }     
-    } 
+    }
+    
+    // Check the update form:     
+        if (isset($post_array['update']) ){         
+            // Save event categorie         
+            $event_categories->update($post_array);     
+        } 
 } 
     if (!empty($post_array)){          
         // Check the add form:     

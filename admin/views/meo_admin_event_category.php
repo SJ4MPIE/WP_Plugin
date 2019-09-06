@@ -66,6 +66,8 @@ echo '</pre>'; //*/
     ( Uitje, excursie, etc)
      <?php
         echo ($add ? "<p>Added a new event</p>" : "");
+        // Check if action == update : then start update form            
+        echo (($action == 'update') ? '<form action="'.$base_url.'" method="post">' : ''); 
     ?>
     <table>
         <caption>Event type categories</caption>
@@ -101,6 +103,10 @@ echo '</pre>'; //*/
                     <?php } ?> 
             <?php } ?> 
     </table>
+    <?php
+    // Check if action = update : then end update form
+    echo (($action == 'update' ) ? '</form>' : ''); 
+    ?>
     <form action="<?php echo $base_url; ?>" method="post"><tr>       
         <table>            
             <tr><td colspan="2"><input type="text" name="name"></td>

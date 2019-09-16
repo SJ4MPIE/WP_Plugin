@@ -43,7 +43,9 @@
                 $this->requireAdmin();                           
                 // Setup admin page             
                 $this->createAdmin();
-            }     
+            }
+            // Load the view shortcodes 
+            $this->loadViews();
     }          
     /**      
     * Loads all admin related files into scope.      
@@ -60,6 +62,13 @@
     public function createAdmin(){                  
         MyEventOrganiser_AdminController::prepare();     
     }
+
+    /**
+    *  Load the view shortcodes:
+    */     
+    public function loadViews() {
+        include MY_EVENT_ORGANISER_PLUGIN_INCLUDES_VIEWS_DIR. '/view_shortcodes.php';
+    } 
 }
 
 // Instantiate the class 

@@ -101,7 +101,11 @@ echo '</pre>'; //*/
                         // Create update link
                         $params = array( 'action' => 'update', 'id' => $event_cat_obj->getId()); 
                         // Add params to base url update link
-                        $upd_link = add_query_arg( $params, $base_url );   
+                        $upd_link = add_query_arg( $params, $base_url );
+                        // Create delete link    
+                        $params = array( 'action'    => 'delete', 'id' => $event_cat_obj->getId()); 
+                        // Add params to base url delete link
+                        $del_link = add_query_arg( $params, $base_url );    
                         ?>
                             <tr><td width="10"><?php echo $event_cat_obj->getId(); ?></td>
                         <?php 
@@ -121,6 +125,7 @@ echo '</pre>'; //*/
                                 // If action is update don’t show the action button 
                                 ?> 
                             <td><a href="<?php echo $upd_link; ?>">Update</a></td>
+                            <td><a href="<?php echo $del_link; ?>">Delete</a></td>
                             <?php      
                             } // if action !== update 
                             ?>

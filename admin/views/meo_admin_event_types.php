@@ -1,17 +1,17 @@
 <?php
 // Include model:
-include MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR. "/EventCategory.php";
+include MY_EVENT_ORGANISER_PLUGIN_MODEL_DIR. "/EventType.php";
 
 // Declare class variable:
-$event_categories = new EventCategory();
+$event_type = new EventType();
 // Set base url to current file and add page specific vars
 $base_url = get_admin_url().'admin.php'; $params = array( 'page'    => basename(__FILE__,".php"));
 // Add params to base url
 $base_url = add_query_arg( $params, $base_url );
 // Get the GET data in filtered array 
-$get_array = $event_categories->getGetValues();
+$get_array = $event_type->getGetValues();
 // Get the POST data in filtered array 
-$post_array = $event_categories->getPostValues(); 
+$post_array = $event_type->getPostValues(); 
 // echo '<pre>'; 
 // echo __FILE__.__LINE__.'<br />';
 // var_dump($post_array); 
@@ -27,7 +27,7 @@ $action = FALSE;
  if (!empty($get_array)){
      // Check actions
      if (isset($get_array['action'])){
-         $action = $event_categories->handleGetAction($get_array);
+         $action = $event_type->handleGetAction($get_array);
     }
 } 
  // Check the POST data 
@@ -36,7 +36,7 @@ $action = FALSE;
     $add = FALSE;     
     if (isset($post_array['add']) ){         
             // Save event categorie        
-            $result = $event_categories->save($post_array);        
+            $result = $event_type->save($post_array);        
         if ($result){            
             // Save was succesfull            
             $add = TRUE;         
@@ -50,19 +50,19 @@ $action = FALSE;
     // Check the update form:     
         if (isset($post_array['update']) ){         
             // Save event categorie         
-            $event_categories->update($post_array);     
+            $event_type->update($post_array);     
         } 
 } 
-// echo '<pre>'; 
+echo '<pre>'; 
 
-// echo __FILE__.__LINE__.'<br />';
+echo __FILE__.__LINE__.'<br />';
 
-// var_dump($post_array);
+var_dump($post_array);
 
-// echo '</pre>'; //*/
+echo '</pre>'; //*/
  ?> 
 <div class="wrap">
-    Admin event categorie CRUD.<br />
+    Admin event Type CRUD.<br />
     ( Uitje, excursie, etc)
      <?php
         echo ($add ? "<p>Added a new event</p>" : "");
@@ -70,7 +70,7 @@ $action = FALSE;
         echo (($action == 'update') ? '<form action="'.$base_url.'" method="post">' : ''); 
     ?>
     <table>
-        <caption>Event type categories</caption>
+        <caption>Event type</caption>
         <thead>
             <tr>
                 <th width="10">Id</th>
@@ -81,11 +81,11 @@ $action = FALSE;
      <!-- <tr><td colspan="3">Event types rij 1</td></tr> -->
      <?php 
      //*                
-        if( $event_categories->getNrOfEventCategories() < 1){ ?>
-        <tr><td colspan="3">Start adding Event Categories</tr> 
+        if( $event_type->getNrOfEventTypes() < 1){ ?>
+        <tr><td colspan="3">Start adding Event types</tr> 
         <?php               
             } else {                     
-                $cat_list = $event_categories->getEventCategoryList();                                       
+                $cat_list = $event_type->getEventTypeList();                                       
                    //** Show all event categories in the tabel                    
                     foreach( $cat_list as $event_cat_obj){ 
                     

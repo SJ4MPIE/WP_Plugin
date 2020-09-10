@@ -3,7 +3,7 @@
 * Description of EventCategories 
 * @author Sam Tieman
 */ 
- class EventCategory { 
+ class EventType { 
     /**      
     *getPostValues :      *
     * Filter input and retrieve POST input params      
@@ -46,21 +46,19 @@
             }                      
         global $wpdb;                      
         // Insert query             
-        $wpdb->query($wpdb->prepare("INSERT INTO `". $wpdb->prefix ."meo_event_category` ( `name`, `description`)".                      
+        $wpdb->query($wpdb->prepare("INSERT INTO `". $wpdb->prefix ."meo_event_type` ( `name`, `description`)".                      
         " VALUES ( '%s', '%s');",$input_array['name'], $input_array['description']) ); 
         // Error ? It's in there:             
         if ( !empty($wpdb->last_error) ){                
             $this->last_error = $wpdb->last_error;              
             return FALSE;          
         } 
-        /*             
-        echo '<pre>';             
-        echo __FILE__.__LINE__.'<br />';       
-        var_dump($wpdb);             
-        echo '</pre>';          
-            //*/ 
-        //echo 'Insert name and description for this Category:"'.$input_array['name'].             
-        //        '"-"'. $input_array['description'].'"<br />'; 
+            
+        // echo '<pre>';             
+        // echo __FILE__.__LINE__.'<br />';       
+        // var_dump($wpdb);             
+        // echo '</pre>';          
+        // echo 'Insert name and description for this Category:"'.$input_array['name'].       '"-"'. $input_array['description'].'"<br />'; 
 
 
         } 
@@ -75,19 +73,19 @@
     /**
      * @return int number of Event categories stored in db    
      */     
-    public function getNrOfEventCategories(){ 
+    public function getNrOfEventTypes(){ 
         global $wpdb;
-        $query = "SELECT COUNT(*) AS nr FROM `". $wpdb->prefix ."meo_event_category`";
+        $query = "SELECT COUNT(*) AS nr FROM `". $wpdb->prefix ."meo_event_type`";
         $result = $wpdb->get_results( $query, ARRAY_A );
         return $result[0]['nr'];
     }
     /**     
     * @return type      
     */     
-    public function getEventCategoryList(){                 
+    public function getEventTypeList(){                 
         global $wpdb;         
         $return_array = array();                  
-        $result_array = $wpdb->get_results( "SELECT * FROM `". $wpdb->prefix . "meo_event_category` ORDER BY `id_event_category`", ARRAY_A);                 
+        $result_array = $wpdb->get_results( "SELECT * FROM `". $wpdb->prefix . "meo_event_type` ORDER BY `id_event_type`", ARRAY_A);                 
                
         // echo '<pre>'; 
         // echo __FILE__.__LINE__.'<br />';         
@@ -96,10 +94,10 @@
         // For all database results:         
         foreach ($result_array as $idx => $array){    
             // New object             
-            $cat = new EventCategory();             
+            $cat = new EventType();             
             // Set all info             
             $cat->setName($array['name']);             
-            $cat->setId($array['id_event_category']);             
+            $cat->setId($array['id_event_type']);             
             $cat->setDescription($array['description']);                 
             // Add new object toe return array.             
             $return_array[] = $cat; 
@@ -209,7 +207,7 @@
     public function update($input_array){
         try {
             $array_fields = array('id', 'name', 'description');
-            $table_fields = array( 'id_event_category', 'name' , 'description');
+            $table_fields = array( 'id_event_type', 'name' , 'description');
             $data_array = array();
             // Check fields
             foreach( $array_fields as $field){
@@ -228,7 +226,7 @@
             // Replace form field id index by table field id name
             $wpdb->update($this->getTableName(),
             $this->getTableDataArray($data_array),
-            array( 'id_event_category' => $input_array['id']), // Where
+            array( 'id_event_type' => $input_array['id']), // Where
             array( '%s', '%s' ),    // Data format
             array( '%d' ));         // Where format
             
@@ -255,11 +253,11 @@
             throw new Exception(__("Missing mandatory fields") ); 
             global $wpdb; 
             // Delete query
-            $query = $wpdb->prepare("Delete FROM `". $this->getTableName(). "` WHERE `id_event_category` = %d", $input_array['id']); 
+            $query = $wpdb->prepare("Delete FROM `". $this->getTableName(). "` WHERE `id_event_type` = %d", $input_array['id']); 
             // Execute query:
             $wpdb->query( $query );
             // Delete row by provided id (Wordpress style)
-            $wpdb->delete( $this->getTableName(),  array( 'id_event_category' => $input_array['id'] ), array( '%d' ) ); 
+            $wpdb->delete( $this->getTableName(),  array( 'id_event_type' => $input_array['id'] ), array( '%d' ) ); 
             // Where format
             // Error ? It's in there:
             if ( !empty($wpdb->last_error) ){
@@ -283,7 +281,7 @@
     */     
     private function getTableName(){
         global $wpdb;
-        return $table = $wpdb->prefix . "meo_event_category";
+        return $table = $wpdb->prefix . "meo_event_type";
     }
 
     /**      
@@ -309,7 +307,7 @@
             // Remove the index -> is primary key and can   
             // therefore not be changed!                 
             if (!empty($table_data)){
-                unset($table_data['id_event_category']);
+                unset($table_data['id_event_type']);
             }                 
             break;             
             // Remove          
@@ -346,4 +344,6 @@
 
 
 		       
-}
+} 
+
+?> 
